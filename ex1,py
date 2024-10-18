@@ -1,0 +1,77 @@
+def calcular_inss(salario_base):
+    if salario_base <= 1100.00:
+        return salario_base * 0.075
+    elif salario_base <= 2203.48:
+        return salario_base * 0.09
+    elif salario_base <= 3305.22:
+        return salario_base * 0.12
+    elif salario_base <= 6433.57:
+        desconto = salario_base * 0.14
+        return min(desconto, 854.36)
+    else:
+        return 854.36
+
+def calcular_irrf(salario_base, dependentes):
+    salario_com_dependente = salario_base - (dependentes * 189.59)
+    
+    if salario_com_dependente <= 2259.20:
+        return 0
+    elif salario_com_dependente <= 2826.65:
+        return salario_com_dependente * 0.075
+    elif salario_com_dependente <= 3751.05:
+        return salario_com_dependente * 0.15
+    elif salario_com_dependente <= 4664.68:
+        return salario_com_dependente * 0.225
+    else:
+        return salario_com_dependente * 0.275
+
+def calcular_vale_transporte(salario_base, optou_vale_transporte):
+    if optou_vale_transporte == 's':
+        return salario_base * 0.06
+    return 0
+
+def calcular_vale_refeicao(valor_vale_refeicao):
+    return valor_vale_refeicao * 0.20
+
+def calcular_plano_saude(dependentes):
+    return dependentes * 150.00
+
+def calcular_salario_liquido(salario_base, optou_vale_transporte, valor_vale_refeicao):
+    # Considera 1 dependente
+    dependentes = 1
+    
+    inss = calcular_inss(salario_base)
+    irrf = calcular_irrf(salario_base, dependentes)
+    vale_transporte = calcular_vale_transporte(salario_base, optou_vale_transporte)
+    vale_refeicao = calcular_vale_refeicao(valor_vale_refeicao)
+    plano_saude = calcular_plano_saude(dependentes)
+    
+    descontos_totais = inss + irrf + vale_transporte + vale_refeicao + plano_saude
+    salario_liquido = salario_base - descontos_totais
+    
+    return salario_liquido, inss, irrf, vale_transporte, vale_refeicao, plano_saude
+
+# Solicitar matrícula e senha (para simplificação, apenas simulação)
+matricula = input("Digite sua matrícula: ")
+senha = input("Digite sua senha: ")
+
+# Solicitar o salário base
+salario_base = float(input("Digite seu salário base (R$): "))
+
+# Perguntar sobre o vale transporte
+optou_vale_transporte = input("Deseja receber vale transporte? (s/n): ").lower()
+
+# Perguntar o valor do vale refeição fornecido pela empresa
+valor_vale_refeicao = float(input("Digite o valor do vale refeição fornecido pela empresa (R$): "))
+
+# Calcular salário líquido e descontos
+salario_liquido, inss, irrf, vale_transporte, vale_refeicao, plano_saude = calcular_salario_liquido(salario_base, optou_vale_transporte, valor_vale_refeicao)
+
+# Exibir resultados
+print(f"\nSalário Base: R$ {salario_base:.2f}")
+print(f"INSS: R$ {inss:.2f}")
+print(f"IRRF: R$ {irrf:.2f}")
+print(f"Vale Transporte: R$ {vale_transporte:.2f}")
+print(f"Vale Refeição: R$ {vale_refeicao:.2f}")
+print(f"Plano de Saúde: R$ {plano_saude:.2f}")
+print(f"Salário Líquido: R$ {salario_liquido:.2f}")
